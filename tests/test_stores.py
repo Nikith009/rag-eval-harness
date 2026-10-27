@@ -45,7 +45,10 @@ def test_faiss_matches_memory_store():
         s.add([0, 1, 2, 3], vecs)
 
     query = emb.embed(["report a lost laptop"])[0]
-    assert [h.id for h in mem.search(query, 3)] == [h.id for h in fai.search(query, 3)]
+    mem_hits, fai_hits = mem.search(query, 4), fai.search(query, 4)
+    # same best match and same scores; tied scores may come back in a different order
+    assert mem_hits[0].id == fai_hits[0].id == 0
+    assert np.allclose([h.score for h in mem_hits], [h.score for h in fai_hits], atol=1e-5)
 
 
 def test_unknown_store():
