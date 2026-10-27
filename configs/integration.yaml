@@ -1,0 +1,33 @@
+# Used by the CI integration job: real embeddings and every local vector store,
+# extractive answers so no API key is needed.
+name: integration
+corpus: data/sample/docs
+testset: data/sample/testset.jsonl
+output_dir: results
+top_k: 4
+
+embedder:
+  provider: sentence-transformers
+  model: all-MiniLM-L6-v2
+
+chunkers:
+  - name: fixed-100
+    strategy: fixed
+    size: 100
+    overlap: 20
+  - name: recursive-150
+    strategy: recursive
+    size: 150
+    overlap: 30
+  - name: sentence-4
+    strategy: sentence
+    sentences: 4
+    sentence_overlap: 1
+
+stores: [memory, faiss, milvus]
+
+generator:
+  provider: extractive
+
+evaluator:
+  backend: none

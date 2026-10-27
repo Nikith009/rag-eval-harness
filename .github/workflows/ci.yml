@@ -33,7 +33,29 @@ jobs:
       - name: Offline benchmark smoke test
         run: rageval run -c configs/ci.yaml --offline
 
-      - uses: actions/upload-artifact@v4
+  integration:
+    # real embeddings and every local vector store (Pinecone needs an API key)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
         with:
-          name: smoke-report-py${{ matrix.python-version }}
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install
+        run: |
+          pip install torch --index-url https://download.pytorch.org/whl/cpu
+          pip install -e ".[faiss,milvus,embeddings,dev]"
+
+      - name: Benchmark with sentence-transformers on memory, FAISS and Milvus
+        run: rageval run -c configs/integration.yaml --offline
+
+      - name: All stores return the same retrieval results
+        run: python scripts/check_store_parity.py results/integration-*/summary.json
+
+      - uses: actions/upload-artifact@v6
+        with:
+          name: integration-report
           path: results/
