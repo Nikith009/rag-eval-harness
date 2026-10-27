@@ -1,0 +1,38 @@
+name: sample-benchmark
+corpus: data/sample/docs
+testset: data/sample/testset.jsonl
+output_dir: results
+top_k: 4
+
+embedder:
+  provider: sentence-transformers   # or "hashing" for a no-download baseline
+  model: all-MiniLM-L6-v2
+
+chunkers:
+  - name: fixed-100
+    strategy: fixed
+    size: 100
+    overlap: 20
+  - name: fixed-300
+    strategy: fixed
+    size: 300
+    overlap: 50
+  - name: recursive-150
+    strategy: recursive
+    size: 150
+    overlap: 30
+  - name: sentence-4
+    strategy: sentence
+    sentences: 4
+    sentence_overlap: 1
+
+stores: [faiss, milvus]   # add pinecone once PINECONE_API_KEY is set
+
+generator:
+  provider: claude
+  model: claude-haiku-5-5
+  max_tokens: 400
+
+evaluator:
+  backend: judge          # judge | ragas | none
+  model: claude-sonnet-5-5

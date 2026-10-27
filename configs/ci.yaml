@@ -1,0 +1,32 @@
+# Small offline config used by CI: no model downloads, no API calls.
+name: ci-smoke
+corpus: data/sample/docs
+testset: data/sample/testset.jsonl
+output_dir: results
+top_k: 4
+
+embedder:
+  provider: hashing
+  dim: 512
+
+chunkers:
+  - name: fixed-100
+    strategy: fixed
+    size: 100
+    overlap: 20
+  - name: recursive-150
+    strategy: recursive
+    size: 150
+    overlap: 30
+  - name: sentence-4
+    strategy: sentence
+    sentences: 4
+    sentence_overlap: 1
+
+stores: [memory, faiss]
+
+generator:
+  provider: extractive
+
+evaluator:
+  backend: none
