@@ -1,0 +1,13 @@
+{
+  "name": "rag-eval-harness",
+  "image": "mcr.microsoft.com/devcontainers/python:3.12",
+  "postCreateCommand": "pip install torch --index-url https://download.pytorch.org/whl/cpu && pip install -e '.[all,dev]'",
+  "secrets": {
+    "ANTHROPIC_API_KEY": {
+      "description": "Needed for Claude answers and judged metrics; offline mode works without it."
+    }
+  },
+  "customizations": {
+    "vscode": { "extensions": ["ms-python.python", "charliermarsh.ruff"] }
+  }
+}

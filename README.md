@@ -1,8 +1,16 @@
 # rag-eval-harness
 
+[![ci](https://github.com/Nikith009/rag-eval-harness/actions/workflows/ci.yml/badge.svg)](https://github.com/Nikith009/rag-eval-harness/actions/workflows/ci.yml) [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/Nikith009/rag-eval-harness)
+
 A small harness for answering a practical question: **which chunking strategy and vector database should this RAG system use?**
 
 It runs every combination of chunker × vector store in a config against a labelled question set, generates answers with Claude, and scores each configuration on retrieval quality and answer quality. Results land in a CSV, a JSON summary and a Markdown report, so configurations can be compared side by side instead of picked by gut feel.
+
+## Try it
+
+- **Run the tests:** [CI workflow](https://github.com/Nikith009/rag-eval-harness/actions/workflows/ci.yml) → *Run workflow*. The `integration` job runs a real benchmark with sentence-transformers on memory, FAISS and Milvus and prints the report on the run page.
+- **Run a benchmark with Claude:** add an `ANTHROPIC_API_KEY` repository secret, then [demo workflow](https://github.com/Nikith009/rag-eval-harness/actions/workflows/demo.yml) → *Run workflow*. Pick how many questions to use and whether to judge answers; the comparison table appears on the run page. Without the secret it runs retrieval-only.
+- **In the browser:** [open a Codespace](https://codespaces.new/Nikith009/rag-eval-harness), then `rageval run -c configs/ci.yaml --offline`.
 
 ## What it measures
 

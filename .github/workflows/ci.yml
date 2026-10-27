@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
   pull_request:
+  workflow_dispatch:
 
 jobs:
   test:
@@ -54,6 +55,9 @@ jobs:
 
       - name: All stores return the same retrieval results
         run: python scripts/check_store_parity.py results/integration-*/summary.json
+
+      - name: Show the report on the run page
+        run: cat results/integration-*/report.md >> "$GITHUB_STEP_SUMMARY"
 
       - uses: actions/upload-artifact@v6
         with:
