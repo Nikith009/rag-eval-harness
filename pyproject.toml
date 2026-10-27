@@ -1,0 +1,53 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rag-eval-harness"
+version = "0.1.0"
+description = "Benchmark RAG configurations across vector databases and chunking strategies."
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{ name = "Veera Sai Nikith Kantipudi" }]
+license = { text = "MIT" }
+dependencies = [
+    "numpy>=1.26",
+    "pydantic>=2.5",
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+claude = ["anthropic>=0.40"]
+faiss = ["faiss-cpu>=1.8"]
+milvus = ["pymilvus[milvus_lite]>=2.4"]
+pinecone = ["pinecone>=5.0"]
+embeddings = ["sentence-transformers>=3.0"]
+pdf = ["pypdf>=4.0"]
+ragas = [
+    "ragas>=0.2,<0.3",
+    "langchain-anthropic>=0.3",
+    "langchain-huggingface>=0.1",
+    "pandas>=2.0",
+]
+all = [
+    "rag-eval-harness[claude,faiss,milvus,pinecone,embeddings,pdf]",
+]
+dev = ["pytest>=8.0", "ruff>=0.6"]
+
+[project.scripts]
+rageval = "rageval.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+# line length is handled by `ruff format`; zip(strict=) adds noise here
+ignore = ["E501", "B905", "B027"]
